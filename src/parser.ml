@@ -102,5 +102,4 @@ let from_string string_value =
   |> from_stream
 
 
-let is_pure = snd
-let tokens = fst
+let (tokens, is_pure) = (fst, snd)
