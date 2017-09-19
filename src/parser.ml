@@ -66,16 +66,19 @@ let optimize = function
 let from_stream stream =
   
   let rec parse purity acc =
+    
     match Stream.next stream with
       
-    | ('+' | '-') as current -> parse purity (memory current acc)
-    | ('>' | '<') as current -> parse purity (cursor current acc)
-       
+    | ('+' | '-') as current ->
+       parse purity (memory current acc)
+      
+    | ('>' | '<') as current ->
+       parse purity (cursor current acc)
+      
     | '.' -> parse purity (Output :: acc)
     | ',' -> parse false (Input :: acc)
 
     | '[' ->
-       
        let (result, kind, new_purity) = parse purity [] in
        begin
          match kind with
@@ -87,9 +90,9 @@ let from_stream stream =
        
     | ']' -> (List.rev acc, End_of_loop, purity)
 
-           
     | _   -> parse purity acc 
-    | exception Stream.Failure -> (List.rev acc, End_of_stream, purity)
+    | exception Stream.Failure ->
+       (List.rev acc, End_of_stream, purity)
 
   in
   let (tokens, _, purity) = parse true [] in
