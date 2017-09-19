@@ -57,4 +57,4 @@ let output ?(interactive=true) (mem, tape) =
     |> char_of_int
   in
   let () = if interactive then print_char char in
-  (mem, tape)
+  (mem, Format.sprintf "%s%c" tape char)
