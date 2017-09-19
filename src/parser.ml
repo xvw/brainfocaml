@@ -31,6 +31,8 @@ type token =
   | Loop of token list
   | Nullify
 
+type parsed = (token list * bool)
+
 
 type end_of =
   | End_of_loop
@@ -63,36 +65,42 @@ let optimize = function
 
 let from_stream stream =
   
-  let rec parse acc =
+  let rec parse purity acc =
     match Stream.next stream with
       
-    | ('+' | '-') as current -> parse (memory current acc)
-    | ('>' | '<') as current -> parse (cursor current acc)
+    | ('+' | '-') as current -> parse purity (memory current acc)
+    | ('>' | '<') as current -> parse purity (cursor current acc)
        
-    | '.' -> parse (Output :: acc)
-    | ',' -> parse (Input :: acc)
+    | '.' -> parse purity (Output :: acc)
+    | ',' -> parse false (Input :: acc)
 
     | '[' ->
        
-       let (result, kind) = parse [] in
+       let (result, kind, new_purity) = parse purity [] in
        begin
          match kind with
          | End_of_stream -> raise Brace_mismatch
          | End_of_loop ->
             let loop = optimize result in 
-            parse (loop :: acc)
+            parse new_purity (loop :: acc)
        end
        
-    | ']' -> (List.rev acc, End_of_loop)
+    | ']' -> (List.rev acc, End_of_loop, purity)
 
            
-    | _   -> parse acc 
-    | exception Stream.Failure -> (List.rev acc, End_of_stream)
+    | _   -> parse purity acc 
+    | exception Stream.Failure -> (List.rev acc, End_of_stream, purity)
 
-  in fst (parse [])
+  in
+  let (tokens, _, purity) = parse true [] in
+  (tokens, purity)
 
 
 let from_string string_value =
   string_value
   |> Stream.of_string
   |> from_stream
+
+
+let is_pure = snd
+let tokens = fst

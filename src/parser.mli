@@ -37,9 +37,17 @@ type token =
   (** Optimization *)
   | Nullify
 
+type parsed = (token list * bool)
+
 
 (** Parse a char Stream.t to a token list *)
-val from_stream : char Stream.t -> token list
+val from_stream : char Stream.t -> parsed
 
 (** Parse a string to a token list *)
-val from_string : string -> token list
+val from_string : string -> parsed
+
+(** Check if a effective side-effect is present *)
+val is_pure : parsed -> bool
+
+(** Get the parsed tokens *)
+val tokens : parsed -> token list
