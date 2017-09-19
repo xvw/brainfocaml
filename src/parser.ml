@@ -69,11 +69,8 @@ let from_stream stream =
     
     match Stream.next stream with
       
-    | ('+' | '-') as current ->
-       parse purity (memory current acc)
-      
-    | ('>' | '<') as current ->
-       parse purity (cursor current acc)
+    | ('+' | '-') as current -> parse purity (memory current acc)
+    | ('>' | '<') as current -> parse purity (cursor current acc)
       
     | '.' -> parse purity (Output :: acc)
     | ',' -> parse false (Input :: acc)
@@ -95,8 +92,8 @@ let from_stream stream =
        (List.rev acc, End_of_stream, purity)
 
   in
-  let (tokens, _, purity) = parse true [] in
-  (tokens, purity)
+  let (tokens, _, purity) = parse true []
+  in (tokens, purity)
 
 
 let from_string string_value =
