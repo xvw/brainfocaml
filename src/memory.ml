@@ -19,27 +19,42 @@
  *
  *)
 
-(** This module describes the Parsing tools for a Brainfuck sequence *)
 
-(** This exception is raised if a ] is missing *)
-exception Brace_mismatch
+type t = (int Zipper.t * Bytes.t)
 
-(** This exception is raised if a Loop is infinite and useless *)
-exception Useless_infinite_loop
+let create () =
+  (Zipper.create 0, "")
 
-(** Describe all brainfuck tokens *)
-type token =
-  | Memory of int
-  | Cursor of int
-  | Input
-  | Output
-  | Loop of token list
-  (** Optimization *)
-  | Nullify
+let cursor (mem, tape) value =
+  let f =
+    if value > 0
+    then Zipper.move_right
+    else Zipper.move_left
+  in 
+  let rec loop acc = function
+    | 0 -> (acc, tape)
+    | x -> loop (f acc) (succ x)
+  in loop mem (abs value)
 
+let memory (mem, tape) value =
+  (Zipper.replace ((+) value) mem, tape)
 
-(** Parse a char Stream.t to a token list *)
-val from_stream : char Stream.t -> token list
+let nullify (mem, tape) =
+  (Zipper.replace_by mem 0, tape)
 
-(** Parse a string to a token list *)
-val from_string : string -> token list
+let input (mem, tape) =
+  let z =
+    (fun x -> x)
+    |> Scanf.scanf "%c"
+    |> int_of_char
+    |> Zipper.replace_by mem
+  in (z, tape)
+
+let output ?(interactive=true) (mem, tape) =
+  let char =
+    mem
+    |> Zipper.current
+    |> char_of_int
+  in
+  let () = if interactive then print_char char in
+  (mem, tape)

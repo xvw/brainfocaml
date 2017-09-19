@@ -19,27 +19,25 @@
  *
  *)
 
-(** This module describes the Parsing tools for a Brainfuck sequence *)
+(** Describe a Zipper to manage the Memory *)
 
-(** This exception is raised if a ] is missing *)
-exception Brace_mismatch
-
-(** This exception is raised if a Loop is infinite and useless *)
-exception Useless_infinite_loop
-
-(** Describe all brainfuck tokens *)
-type token =
-  | Memory of int
-  | Cursor of int
-  | Input
-  | Output
-  | Loop of token list
-  (** Optimization *)
-  | Nullify
+type t
 
 
-(** Parse a char Stream.t to a token list *)
-val from_stream : char Stream.t -> token list
+(** Initialize a new memory box *)
+val create : unit -> t
 
-(** Parse a string to a token list *)
-val from_string : string -> token list
+(** Move into the memory with a particuliar amount *)
+val cursor : t -> int -> t
+
+(** Set the current value to zero *)
+val nullify : t -> t
+
+(** Change the memory with a particular amount  *)
+val memory : t -> int -> t
+
+(** Input a value in the memory *)
+val input : t -> t
+
+(** Output a value from the memory  *)
+val output : ?interactive:bool -> t -> t

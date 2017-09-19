@@ -19,20 +19,80 @@
  *
  *)
 
+ 
+exception Brace_mismatch
+exception Useless_infinite_loop
+
 type token =
   | Memory of int
   | Cursor of int
   | Input
   | Output
   | Loop of token list
+  | Nullify
 
-let finalize (tokens, eof) =
-  tokens
 
+type end_of =
+  | End_of_loop
+  | End_of_stream
+
+
+let memory current acc =
+  let offset = if current = '+' then 1 else - 1 in
+  let (value, rest) =
+    match acc with
+    | Memory x :: xs -> (x + offset, xs)
+    | rest -> (offset, rest)
+  in if value = 0 then rest else (Memory value) :: rest
+
+
+let cursor current acc =
+  let offset = if current = '>' then 1 else - 1 in
+  let (value, rest) =
+    match acc with
+    | Cursor x :: xs -> (x + offset, xs)
+    | rest -> (offset, rest)
+  in if value = 0 then rest else (Cursor value) :: rest
+
+
+let optimize = function
+  | [Memory (-1)] -> Nullify
+  | [] -> raise Useless_infinite_loop
+  | [Memory x] when x >= 0 -> raise Useless_infinite_loop
+  | result -> Loop result
 
 let from_stream stream =
+  
   let rec parse acc =
     match Stream.next stream with
-    | _ -> parse acc 
-    | exception Stream.Failure -> (List.rev acc, `EOS )
-  in finalize (parse [])
+      
+    | ('+' | '-') as current -> parse (memory current acc)
+    | ('>' | '<') as current -> parse (cursor current acc)
+       
+    | '.' -> parse (Output :: acc)
+    | ',' -> parse (Input :: acc)
+
+    | '[' ->
+       
+       let (result, kind) = parse [] in
+       begin
+         match kind with
+         | End_of_stream -> raise Brace_mismatch
+         | End_of_loop ->
+            let loop = optimize result in 
+            parse (loop :: acc)
+       end
+       
+    | ']' -> (List.rev acc, End_of_loop)
+
+           
+    | _   -> parse acc 
+    | exception Stream.Failure -> (List.rev acc, End_of_stream)
+
+  in fst (parse [])
+
+
+let from_string string_value =
+  string_value
+  |> Stream.of_string
+  |> from_stream

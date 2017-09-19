@@ -19,27 +19,24 @@
  *
  *)
 
-(** This module describes the Parsing tools for a Brainfuck sequence *)
+(** This module describe a generic (and infinite) zipper *)
 
-(** This exception is raised if a ] is missing *)
-exception Brace_mismatch
+type 'a t
 
-(** This exception is raised if a Loop is infinite and useless *)
-exception Useless_infinite_loop
+(** Create a new zipper *)
+val create : 'a -> 'a t
 
-(** Describe all brainfuck tokens *)
-type token =
-  | Memory of int
-  | Cursor of int
-  | Input
-  | Output
-  | Loop of token list
-  (** Optimization *)
-  | Nullify
+(** move left in the zipper *)
+val move_left : 'a t -> 'a t
 
+(** move right in the zipper  *)
+val move_right : 'a t -> 'a t
 
-(** Parse a char Stream.t to a token list *)
-val from_stream : char Stream.t -> token list
+(** Get the current value of the zipper  *)
+val current : 'a t -> 'a
 
-(** Parse a string to a token list *)
-val from_string : string -> token list
+(** Replace the current value by another  *)
+val replace_by : 'a t -> 'a -> 'a t
+
+(** Replace with a function the value of the current element *)
+val replace : ('a -> 'a) -> 'a t -> 'a t
