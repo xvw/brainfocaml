@@ -33,11 +33,11 @@ let cursor (mem, tape) value =
   in 
   let rec loop acc = function
     | 0 -> (acc, tape)
-    | x -> loop (f acc) (succ x)
+    | x -> loop (f acc) (pred x)
   in loop mem (abs value)
 
 let memory (mem, tape) value =
-  (Zipper.replace ((+) value) mem, tape)
+  (Zipper.replace (fun x -> x + value) mem, tape)
 
 let nullify (mem, tape) =
   (Zipper.replace_by mem 0, tape)
@@ -58,3 +58,13 @@ let output ?(interactive=true) (mem, tape) =
   in
   let () = if interactive then print_char char in
   (mem, Format.sprintf "%s%c" tape char)
+
+let tape = snd
+
+let need_jump (mem, _) =
+  (Zipper.current mem) = 0
+
+let current x =
+  x
+  |> fst
+  |> Zipper.current

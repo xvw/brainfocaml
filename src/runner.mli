@@ -19,34 +19,23 @@
  *
  *)
 
-(** Describe a Zipper to manage the Memory *)
 
-type t
+(** Run brainfuck code *)
 
+exception Not_inlinable
 
-(** Initialize a new memory box *)
-val create : unit -> t
+val run_stream : char Stream.t -> unit
 
-(** Move into the memory with a particuliar amount *)
-val cursor : t -> int -> t
+val run_string : string -> unit
 
-(** Set the current value to zero *)
-val nullify : t -> t
+val run_file : string -> unit
 
-(** Change the memory with a particular amount  *)
-val memory : t -> int -> t
+(* val eval_stream : char Stream.t -> string *)
 
-(** Input a value in the memory *)
-val input : t -> t
+(* val eval_string : string -> string *)
 
-(** Output a value from the memory  *)
-val output : ?interactive:bool -> t -> t
+(* val eval_file : string -> string *)
 
-(** Get the current result of a brainfuck evaluation *)
-val tape : t -> string
+(* val inline : string -> string *)
 
-(** Check if we need a loop *)
-val need_jump : t -> bool
-
-(** Get the current cursor *)
-val current : t -> int 
+val t : unit -> unit
