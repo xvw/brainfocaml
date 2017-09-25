@@ -30,12 +30,11 @@ val run_string : string -> unit
 
 val run_file : string -> unit
 
-(* val eval_stream : char Stream.t -> string *)
+val eval_stream : char Stream.t -> string
 
-(* val eval_string : string -> string *)
+val eval_string : string -> string
 
-(* val eval_file : string -> string *)
+val eval_file : string -> string
 
-(* val inline : string -> string *)
+val inline : string -> string
 
-val t : unit -> unit

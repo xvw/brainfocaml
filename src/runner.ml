@@ -22,27 +22,30 @@
 exception Not_inlinable
 
 let eval interactive =
-  let rec loop mem f =
-    match f with
+  let rec loop mem = function
     | [] -> mem
-    | (Parser.Memory amount) :: xs -> loop (Memory.memory mem amount) xs
-    | (Parser.Cursor amount) :: xs -> loop (Memory.cursor mem amount) xs
-    | Parser.Output :: xs -> loop (Memory.output ~interactive:interactive mem) xs
-    | Parser.Input :: xs -> loop (Memory.input mem) xs
-    | Parser.Nullify :: xs -> loop (Memory.nullify mem) xs
+    | (Parser.Memory amount) :: xs ->
+       loop (Memory.memory mem amount) xs
+    | (Parser.Cursor amount) :: xs ->
+       loop (Memory.cursor mem amount) xs
+    | Parser.Output :: xs ->
+       loop (Memory.output ~interactive:interactive mem) xs
+    | Parser.Input :: xs ->
+       loop (Memory.input mem) xs
+    | Parser.Nullify :: xs ->
+       loop (Memory.nullify mem) xs
     | ((Parser.Loop loop_ctn) :: xs) as tokens ->
-       let () = print_int (Memory.current mem) in
        if Memory.need_jump mem
        then loop mem xs
        else
          let new_mem = loop mem loop_ctn in
          loop new_mem tokens
   in loop (Memory.create ())
-
+   
 let run_stream stream =
   stream
   |> Parser.from_stream
-  |> fst
+  |> Parser.tokens
   |> eval true
   |> ignore
 
@@ -57,6 +60,30 @@ let run_file filename =
   |> Stream.of_channel
   |> run_stream
 
+let eval_stream stream =
+  stream
+  |> Parser.from_stream
+  |> Parser.tokens
+  |> eval false
+  |> Memory.tape
 
-let t () =
-  run_string "++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>."
+let eval_string string =
+  string
+  |> Stream.of_string
+  |> eval_stream
+  
+let eval_file filename =
+  filename
+  |> open_in
+  |> Stream.of_channel
+  |> eval_stream  
+
+let inline string =
+  let parsed = Parser.from_string string in
+  if not (Parser.is_pure parsed) then
+    raise Not_inlinable
+  else
+    parsed
+    |> Parser.tokens
+    |> eval false
+    |> Memory.tape

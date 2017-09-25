@@ -43,7 +43,7 @@ let move_left zip =
 let move_right zip =
   let (left, right) = match zip.right with
     | [] -> (zip.default :: zip.left, [zip.default])
-    | x :: xs -> (zip.left, xs)
+    | x :: xs -> (x :: zip.left, xs)
   in { zip with left = left; right = right}
 
 let current zip =
