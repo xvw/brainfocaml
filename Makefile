@@ -1,5 +1,12 @@
+.PHONY: clean all
+
+all: exe
+
 lib:
 	ocamlbuild -I src brainfuck.cma
+
+exe: lib
+	ocamlbuild -I src brainofocaml.native
 
 clean:
 	rm -rf *.byte

@@ -19,32 +19,7 @@
  *
  *)
 
+(** Replace parsed brainfuck to C string *)
 
-(** Run brainfuck code *)
-
-exception Not_inlinable
-
-val run_stream : char Stream.t -> unit
-
-val run_string : string -> unit
-
-val run_file : string -> unit
-
-val eval_stream : char Stream.t -> string
-
-val eval_string : string -> string
-
-val eval_file : string -> string
-
-val inline : string -> string
-
-val stream_to_c : ?size:int -> char Stream.t -> string
-
-val string_to_c : ?size:int -> string -> string
-
-val file_to_c : ?size:int -> string -> string
-
-val dump_c_file : string -> string -> unit
-
-val read_file : string -> string
-
+(** Compile brainfuck to C with a memory size *)
+val to_c_code : int -> Parser.parsed -> string

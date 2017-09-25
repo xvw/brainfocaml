@@ -90,3 +90,5 @@ setup.data
 setup.log
 
 # End of https://www.gitignore.io/api/emacs,ocaml
+*.c
+*.out

@@ -87,3 +87,38 @@ let inline string =
     |> Parser.tokens
     |> eval false
     |> Memory.tape
+
+
+let stream_to_c ?(size=30000) stream =
+  stream
+  |> Parser.from_stream
+  |> Compiler.to_c_code size
+
+let string_to_c ?(size=30000) string =
+  string
+  |> Stream.of_string
+  |> stream_to_c ~size
+
+let file_to_c ?(size=30000) filename =
+  filename
+  |> open_in
+  |> Stream.of_channel
+  |> stream_to_c ~size
+
+let dump_c_file content filename =
+  let channel = open_out filename in
+  let () = output_string channel content in
+  close_out channel
+
+
+let string_of_in_channel close channel =
+  let length = in_channel_length channel in
+  let result = Bytes.create length in
+  let () = really_input channel result 0 length in
+  let _ = close channel in
+  Bytes.to_string result
+
+let read_file filename =
+  filename
+  |> open_in
+  |> string_of_in_channel close_in
