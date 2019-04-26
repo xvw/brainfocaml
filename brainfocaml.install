@@ -1,0 +1,40 @@
+lib: [
+  "_build/install/default/lib/brainfocaml/META" {"META"}
+  "_build/install/default/lib/brainfocaml/dune-package" {"dune-package"}
+  "_build/install/default/lib/brainfocaml/lib/error.ml" {"lib/error.ml"}
+  "_build/install/default/lib/brainfocaml/lib/error.mli" {"lib/error.mli"}
+  "_build/install/default/lib/brainfocaml/lib/lib.a" {"lib/lib.a"}
+  "_build/install/default/lib/brainfocaml/lib/lib.cma" {"lib/lib.cma"}
+  "_build/install/default/lib/brainfocaml/lib/lib.cmi" {"lib/lib.cmi"}
+  "_build/install/default/lib/brainfocaml/lib/lib.cmt" {"lib/lib.cmt"}
+  "_build/install/default/lib/brainfocaml/lib/lib.cmx" {"lib/lib.cmx"}
+  "_build/install/default/lib/brainfocaml/lib/lib.cmxa" {"lib/lib.cmxa"}
+  "_build/install/default/lib/brainfocaml/lib/lib.cmxs" {"lib/lib.cmxs"}
+  "_build/install/default/lib/brainfocaml/lib/lib.ml" {"lib/lib.ml"}
+  "_build/install/default/lib/brainfocaml/lib/lib__Error.cmi" {"lib/lib__Error.cmi"}
+  "_build/install/default/lib/brainfocaml/lib/lib__Error.cmt" {"lib/lib__Error.cmt"}
+  "_build/install/default/lib/brainfocaml/lib/lib__Error.cmti" {"lib/lib__Error.cmti"}
+  "_build/install/default/lib/brainfocaml/lib/lib__Error.cmx" {"lib/lib__Error.cmx"}
+  "_build/install/default/lib/brainfocaml/lib/lib__Location.cmi" {"lib/lib__Location.cmi"}
+  "_build/install/default/lib/brainfocaml/lib/lib__Location.cmt" {"lib/lib__Location.cmt"}
+  "_build/install/default/lib/brainfocaml/lib/lib__Location.cmti" {"lib/lib__Location.cmti"}
+  "_build/install/default/lib/brainfocaml/lib/lib__Location.cmx" {"lib/lib__Location.cmx"}
+  "_build/install/default/lib/brainfocaml/lib/lib__Parser.cmi" {"lib/lib__Parser.cmi"}
+  "_build/install/default/lib/brainfocaml/lib/lib__Parser.cmt" {"lib/lib__Parser.cmt"}
+  "_build/install/default/lib/brainfocaml/lib/lib__Parser.cmti" {"lib/lib__Parser.cmti"}
+  "_build/install/default/lib/brainfocaml/lib/lib__Parser.cmx" {"lib/lib__Parser.cmx"}
+  "_build/install/default/lib/brainfocaml/lib/lib__Result.cmi" {"lib/lib__Result.cmi"}
+  "_build/install/default/lib/brainfocaml/lib/lib__Result.cmt" {"lib/lib__Result.cmt"}
+  "_build/install/default/lib/brainfocaml/lib/lib__Result.cmti" {"lib/lib__Result.cmti"}
+  "_build/install/default/lib/brainfocaml/lib/lib__Result.cmx" {"lib/lib__Result.cmx"}
+  "_build/install/default/lib/brainfocaml/lib/location.ml" {"lib/location.ml"}
+  "_build/install/default/lib/brainfocaml/lib/location.mli" {"lib/location.mli"}
+  "_build/install/default/lib/brainfocaml/lib/parser.ml" {"lib/parser.ml"}
+  "_build/install/default/lib/brainfocaml/lib/parser.mli" {"lib/parser.mli"}
+  "_build/install/default/lib/brainfocaml/lib/result.ml" {"lib/result.ml"}
+  "_build/install/default/lib/brainfocaml/lib/result.mli" {"lib/result.mli"}
+  "_build/install/default/lib/brainfocaml/opam" {"opam"}
+]
+doc: [
+  "_build/install/default/doc/brainfocaml/LICENSE"
+]

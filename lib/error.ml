@@ -1,7 +1,6 @@
-(*
- * A Simple BF Interpreter (teaching material)
+(* A Simple BF Interpreter (teaching material)
  *
- * Copyright (C) 2017  Xavier Van de Woestyne <xaviervdw@gmail.com>
+ * Copyright (C) 2019  Xavier Van de Woestyne <xaviervdw@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +18,21 @@
  *
  *)
 
-(** Replace parsed brainfuck to C string *)
+type t =
+  | Unknown of string
+  | Unclosed_loop of Location.t
+  | Unopened_loop of Location.t
+  | Loop_stagnation of Location.t
 
-(** Compile brainfuck to C with a memory size *)
-val to_c_code : int -> Parser.parsed -> string
+let pp ppf = function
+  | Unknown s ->
+    Format.fprintf ppf "Unknown(%s)" s
+  | Unclosed_loop loc ->
+    Format.fprintf ppf "Unclosed_loop(%a)" Location.pp loc
+  | Unopened_loop loc ->
+    Format.fprintf ppf "Unopened_loop(%a)" Location.pp loc
+  | Loop_stagnation loc ->
+    Format.fprintf ppf "Loop_stagnation(%a)" Location.pp loc
+;;
+
+let to_string = Format.asprintf "%a" pp

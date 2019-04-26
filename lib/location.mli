@@ -1,7 +1,6 @@
-(*
- * A Simple BF Interpreter (teaching material)
+(* A Simple BF Interpreter (teaching material)
  *
- * Copyright (C) 2017  Xavier Van de Woestyne <xaviervdw@gmail.com>
+ * Copyright (C) 2019  Xavier Van de Woestyne <xaviervdw@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,32 +18,20 @@
  *
  *)
 
+(** Describe a Location *)
 
-(** Run brainfuck code *)
+(** Location *)
+type t =
+  { line : int
+  ; column : int
+  }
 
-exception Not_inlinable
+(** {2 Helpers} *)
 
-val run_stream : char Stream.t -> unit
-
-val run_string : string -> unit
-
-val run_file : string -> unit
-
-val eval_stream : char Stream.t -> string
-
-val eval_string : string -> string
-
-val eval_file : string -> string
-
-val inline : string -> string
-
-val stream_to_c : ?size:int -> char Stream.t -> string
-
-val string_to_c : ?size:int -> string -> string
-
-val file_to_c : ?size:int -> string -> string
-
-val dump_c_file : string -> string -> unit
-
-val read_file : string -> string
-
+val make : ?line:int -> ?column:int -> unit -> t
+val move_left : t -> t
+val move_right : t -> t
+val move_up : t -> t
+val move_down : t -> t
+val pp : Format.formatter -> t -> unit
+val to_string : t -> string

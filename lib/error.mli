@@ -1,7 +1,6 @@
-(*
- * A Simple BF Interpreter (teaching material)
+(* A Simple BF Interpreter (teaching material)
  *
- * Copyright (C) 2017  Xavier Van de Woestyne <xaviervdw@gmail.com>
+ * Copyright (C) 2019  Xavier Van de Woestyne <xaviervdw@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,24 +18,16 @@
  *
  *)
 
-(** This module describe a generic (and infinite) zipper *)
+(** Describe Errors *)
 
-type 'a t
+(** All errors *)
+type t =
+  | Unknown of string
+  | Unclosed_loop of Location.t
+  | Unopened_loop of Location.t
+  | Loop_stagnation of Location.t
 
-(** Create a new zipper *)
-val create : 'a -> 'a t
+(** {2 Helpers} *)
 
-(** move left in the zipper *)
-val move_left : 'a t -> 'a t
-
-(** move right in the zipper  *)
-val move_right : 'a t -> 'a t
-
-(** Get the current value of the zipper  *)
-val current : 'a t -> 'a
-
-(** Replace the current value by another  *)
-val replace_by : 'a t -> 'a -> 'a t
-
-(** Replace with a function the value of the current element *)
-val replace : ('a -> 'a) -> 'a t -> 'a t
+val pp : Format.formatter -> t -> unit
+val to_string : t -> string
