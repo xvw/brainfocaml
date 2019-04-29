@@ -73,3 +73,10 @@ module Testable = struct
   let error = Alcotest.testable Lib.Error.pp Lib.Error.eq
   let result a = Alcotest.result a error
 end
+
+module Check = struct
+  let string message str expected =
+    let result_program = str |> Stream.of_string |> Lib.Parser.from_stream in
+    Alcotest.check Testable.(result program) message result_program expected
+  ;;
+end

@@ -18,3 +18,7 @@ module Testable : sig
   val error : Lib.Error.t Alcotest.testable
   val result : 'a Alcotest.testable -> 'a Lib.Result.t Alcotest.testable
 end
+
+module Check : sig
+  val string : string -> string -> Lib.Parser.program Lib.Result.t -> unit
+end
