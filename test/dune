@@ -1,0 +1,9 @@
+(executable
+ (name test)   
+ (libraries alcotest))
+
+(alias
+ (name  runtest)
+  (package brainfocaml)
+  (deps test.exe)
+(action (run ./test.exe --color=always))) 

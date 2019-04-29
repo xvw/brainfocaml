@@ -34,4 +34,5 @@ val move_right : t -> t
 val move_up : t -> t
 val move_down : t -> t
 val pp : Format.formatter -> t -> unit
+val eq : t -> t -> bool
 val to_string : t -> string

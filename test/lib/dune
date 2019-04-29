@@ -1,0 +1,4 @@
+(library
+ (name lib_test)
+ (public_name brainfocaml.lib_test)
+ (libraries alcotest brainfocaml.lib brainfocaml.test_helpers))

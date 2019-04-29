@@ -30,4 +30,5 @@ type t =
 (** {2 Helpers} *)
 
 val pp : Format.formatter -> t -> unit
+val eq : t -> t -> bool
 val to_string : t -> string
