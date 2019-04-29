@@ -79,9 +79,7 @@ let cursor operation acc =
 ;;
 
 let io acc subject =
-  let token =
-    match subject with `Point -> Output | `Period -> Input
-  in
+  let token = match subject with `Point -> Output | `Period -> Input in
   Result.pure (token :: acc)
 ;;
 
@@ -98,10 +96,7 @@ let loop loc acc = function
 
 let right = Location.move_right
 let down = Location.move_down
-
-let pure_accumulator loc is_pure acc =
-  Result.pure (List.rev acc, is_pure, loc)
-;;
+let pure_accumulator loc is_pure acc = Result.pure (List.rev acc, is_pure, loc)
 
 let finalize_parsing loc is_pure acc = function
   | None ->
@@ -118,29 +113,40 @@ let finalize_sub_parsing loc is_pure acc = function
 ;;
 
 let from_stream stream =
-  let rec parse loc bracket_stack is_pure potential_accumulator =
+  let rec parse loc bracket_stack is_pure accumulator =
     let open Result.Infix in
-    potential_accumulator
+    accumulator
     >>= fun acc ->
     match stream_peek stream with
     | `Empty ->
       finalize_parsing loc is_pure acc bracket_stack
     | (`Plus | `Minus) as operation ->
-      parse (right loc) bracket_stack is_pure (memory operation acc)
+      let new_loc = right loc in
+      let new_acc = memory operation acc in
+      parse new_loc bracket_stack is_pure new_acc
     | (`Left | `Right) as operation ->
-      parse (right loc) bracket_stack is_pure (cursor operation acc)
+      let new_loc = right loc in
+      let new_acc = cursor operation acc in
+      parse new_loc bracket_stack is_pure new_acc
     | (`Point | `Period) as operation ->
-      operation |> io acc |> parse (right loc) bracket_stack false
+      let new_loc = right loc in
+      operation |> io acc |> parse new_loc bracket_stack false
     | `Opened_bracket ->
-      parse (right loc) (Some loc) is_pure (Result.pure [])
+      let next_loc = right loc in
+      let new_stack = Some loc in
+      let empty_acc = Result.pure [] in
+      parse next_loc new_stack is_pure empty_acc
       >>= fun (tokens, sub_is_pure, new_loc) ->
-      parse new_loc bracket_stack sub_is_pure (loop loc acc tokens)
+      let new_acc = loop loc acc tokens in
+      parse new_loc bracket_stack sub_is_pure new_acc
     | `Closed_bracket ->
       finalize_sub_parsing (right loc) is_pure acc bracket_stack
     | `Char '\n' ->
-      parse (down loc) bracket_stack is_pure potential_accumulator
-    | _ ->
-      parse (right loc) bracket_stack is_pure potential_accumulator
+      let new_loc = down loc in
+      parse new_loc bracket_stack is_pure accumulator
+    | `Char _ ->
+      let new_loc = right loc in
+      parse new_loc bracket_stack is_pure accumulator
   in
   parse (Location.make ()) None true (Result.pure [])
   |> Result.map (fun (tokens, is_pure, _location) -> tokens, is_pure)
