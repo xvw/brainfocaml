@@ -84,8 +84,12 @@ let io acc subject =
 ;;
 
 let loop loc acc = function
-  | [ Memory -1 ] ->
-    Result.pure (Clear :: acc)
+  | [ Memory -1 ] | [ Clear ] ->
+    (match acc with
+    | Clear :: _ ->
+      Result.pure acc
+    | _ ->
+      Result.pure (Clear :: acc))
   | [] ->
     Result.err (Loop_stagnation loc)
   | [ Memory x ] when x >= 0 ->
