@@ -1,0 +1,4 @@
+(library
+ (name parsing)
+ (public_name brainfocaml.parsing)
+ (libraries commons))
