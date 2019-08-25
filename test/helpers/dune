@@ -1,4 +1,0 @@
-(library
- (name helpers)
- (public_name brainfocaml.test_helpers)
- (libraries brainfocaml.lib alcotest))
