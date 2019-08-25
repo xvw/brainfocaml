@@ -1,3 +1,7 @@
+.PHONY: build doc test
+
+all: build
+
 build:
 	dune build
 
